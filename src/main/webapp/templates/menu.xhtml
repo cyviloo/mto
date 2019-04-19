@@ -15,14 +15,13 @@ and open the template in the editor.
             <p:menuitem value="Register" action="#{menuPageBean.navigateRegister()}" 
                         rendered="#{!AccountSession.loggedIn}" ajax="false"/>
            <p:menuitem value="All books list" action="#{menuPageBean.navigateAllBooksList()}"
-                       rendered="#{!AccountSession.loggedIn}" ajax="false"/>
-            <p:menuitem value="Check books availability" action="#{menuPageBean.navigateCheckTicketPrice()}" ajax="false"/>
+                        ajax="false"/>
             <p:submenu label="Action">
                 <p:menuitem value="Borrow a book" action="#{menuPageBean.navigateBorrowBook()}"
                             rendered="#{AccountSession.loggedIn}" ajax="false"/>
                 <p:menuitem value="Return a book" action="#{menuPageBean.navigateReturnBook()}"
                             rendered="#{AccountSession.loggedIn}" ajax="false"/>
-                <p:menuitem value="Borrowing history" action="#{menuPageBean.navigateBorrowingHistory()}"
+                <p:menuitem value="Borrowing history" action="#{menuPageBean.navigateBorrowHistory()}"
                             rendered="#{AccountSession.loggedIn}" ajax="false"/>
             </p:submenu>
         </p:menu>

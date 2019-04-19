@@ -40,4 +40,52 @@
             </redirect>
         </navigation-case>
     </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>booksPage</from-outcome>
+            <to-view-id>/bookList.xhtml</to-view-id>
+            <redirect>
+                <redirect-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </redirect-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>borrowPage</from-outcome>
+            <to-view-id>/borrowBook.xhtml</to-view-id>
+            <redirect>
+                <redirect-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </redirect-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>returnPage</from-outcome>
+            <to-view-id>/returnBook.xhtml</to-view-id>
+            <redirect>
+                <redirect-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </redirect-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>historyPage</from-outcome>
+            <to-view-id>/borrowHistory.xhtml</to-view-id>
+            <redirect>
+                <redirect-param>
+                    <name>faces-redirect</name>
+                    <value>true</value>
+                </redirect-param>
+            </redirect>
+        </navigation-case>
+    </navigation-rule>
 </faces-config>
