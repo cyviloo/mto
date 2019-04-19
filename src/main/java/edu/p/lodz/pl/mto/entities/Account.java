@@ -66,6 +66,10 @@ public class Account implements Serializable {
     @Column(name = "birth_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date birthDate;
+   
+    
+    public Account() {
+}
 
    
     /**

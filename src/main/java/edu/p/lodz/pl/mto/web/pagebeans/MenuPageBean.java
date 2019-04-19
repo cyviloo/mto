@@ -19,5 +19,20 @@ public class MenuPageBean {
     public String navigateRegister() {
         return "registerPage";
     }
-
+    
+    public String navigateAllBooksList() {
+        return "booksPage";
+    }
+    
+    public String navigateBorrowBook(){
+        return "borrowPage";
+    }
+    
+    public String navigateReturnBook(){
+        return "returnPage";
+    }
+    
+    public String navigateBorrowHistory(){
+        return "historyPage";
+    }
 }
