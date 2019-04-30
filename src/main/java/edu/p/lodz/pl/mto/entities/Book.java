@@ -5,7 +5,6 @@
  */
 package edu.p.lodz.pl.mto.entities;
 
-
 import edu.p.lodz.pl.mto.utils.ConfigureRentalFilter;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,10 +35,11 @@ import org.eclipse.persistence.annotations.Customizer;
 @Table(name = "book")
 @TableGenerator(name = "Book_Generator", table = "generator", pkColumnName = "name", valueColumnName = "value", pkColumnValue = "book", allocationSize = 1)
 @NamedQueries({
-    @NamedQuery(name = "Book.findAll", query = "SELECT f FROM Book f"),
+    @NamedQuery(name = "Book.findAll", query = "SELECT f FROM Book f")
+    ,
     @NamedQuery(name = "Book.findByTitle", query = "SELECT f FROM Book f WHERE f.title = :title")})
 public class Book implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Book_Generator")
     @Basic(optional = false)
@@ -58,14 +58,20 @@ public class Book implements Serializable {
     private String author;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "year", nullable = false)
+    @Column(name = "year_published", nullable = false)
     private int year;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "book")
     private Rental rentalList;
-    
+
     public Book() {
-}
-    
+    }
+
+    public Book(String title, String author, int year) {
+        this.author = author;
+        this.title = title;
+        this.year = year;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -125,7 +131,6 @@ public class Book implements Serializable {
 //    public void setRentalList(List<Rental> rentalList) {
 //        this.rentalList = rentalList;
 //    }
-
     /**
      * @return the rentalList
      */
@@ -154,5 +159,4 @@ public class Book implements Serializable {
         this.idBook = idBook;
     }
 
-    
 }
