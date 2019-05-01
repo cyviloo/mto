@@ -23,11 +23,11 @@ import static org.mockito.Mockito.*;
  *
  * @author Borys
  */
-public class MOBTest {
+public class MOBEndpointTest {
     
     private MOBEndpoint endpoint;
     
-    public MOBTest() {
+    public MOBEndpointTest() {
         endpoint = new MOBEndpoint();
         endpoint.accountFacade = mock(AccountFacadeMOKLocal.class);
         endpoint.bookFacade = mock(BookFacadeLocal.class);
@@ -54,19 +54,19 @@ public class MOBTest {
     
     @Test
     public void shouldReturnCorrectNumberOfAllBooks() {
-        Assert.assertEquals(endpoint.getAllBooks().size(), 2);
+        Assert.assertEquals(2, endpoint.getAllBooks().size());
     }
     
         @Test
     public void shouldReturnCorrectBooks() {
         Book book1 = endpoint.getAllBooks().get(0);
         Book book2 = endpoint.getAllBooks().get(1);
-        Assert.assertEquals(book1.getAuthor(), "B");
-        Assert.assertEquals(book2.getAuthor(), "Bb");
-        Assert.assertEquals(book1.getTitle(), "A");
-        Assert.assertEquals(book2.getTitle(), "Aa");
-        Assert.assertEquals(book1.getYear(), 1992);
-        Assert.assertEquals(book2.getYear(), 1392);
+        Assert.assertEquals("B", book1.getAuthor());
+        Assert.assertEquals("Bb", book2.getAuthor());
+        Assert.assertEquals("A", book1.getTitle());
+        Assert.assertEquals("Aa", book2.getTitle());
+        Assert.assertEquals(1992, book1.getYear());
+        Assert.assertEquals(1392, book2.getYear());
     }
 
 }
