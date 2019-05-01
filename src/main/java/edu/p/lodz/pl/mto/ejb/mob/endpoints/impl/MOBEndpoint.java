@@ -55,9 +55,9 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
     @Inject
     AccountSession accountSession;
 
-    protected static final Logger loger = Logger.getGlobal();
+    static Logger loger = Logger.getGlobal();
 
-    private long transactionID;
+    long transactionID;
 
     @Override
     @PermitAll
