@@ -9,6 +9,7 @@
             <property name="resourcesXml">
                 src/test/resources-glassfish-embedded/glassfish-resources.xml
             </property>
+            <property name="app">bamboo</property>
         </configuration>
     </container>
 </arquillian>
