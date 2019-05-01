@@ -45,15 +45,15 @@ import static org.eclipse.persistence.sessions.SessionProfiler.Logging;
 public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
 
     @Resource
-    private SessionContext sessionContext;
+    SessionContext sessionContext;
     @EJB
-    private BookFacadeLocal bookFacade;
+    BookFacadeLocal bookFacade;
     @EJB
-    private AccountFacadeMOKLocal accountFacade;
+    AccountFacadeMOKLocal accountFacade;
     @EJB
-    private RentalFacadeLocal rentalFacade;
+    RentalFacadeLocal rentalFacade;
     @Inject
-    private AccountSession accountSession;
+    AccountSession accountSession;
 
     protected static final Logger loger = Logger.getGlobal();
 
