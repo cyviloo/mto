@@ -7,6 +7,7 @@ package edu.p.lodz.pl.mto.ejb.mob.endpoints.impl;
 
 import edu.p.lodz.pl.mto.entities.Account;
 import edu.p.lodz.pl.mto.entities.Book;
+import edu.p.lodz.pl.mto.entities.Rental;
 import edu.p.lodz.pl.mto.mob.dao.BookFacadeLocal;
 import edu.p.lodz.pl.mto.mob.dao.RentalFacadeLocal;
 import edu.p.lodz.pl.mto.mok.dao.AccountFacadeMOKLocal;
@@ -16,14 +17,18 @@ import java.rmi.RemoteException;
 import java.security.Principal;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJBException;
 import javax.ejb.SessionContext;
 import javax.transaction.TransactionRolledbackException;
+import javax.validation.ConstraintViolationException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.*;
 
 /**
@@ -31,6 +36,8 @@ import static org.mockito.Mockito.*;
  * @author Borys
  */
 public class MOBEndpointTest {
+    
+    private class TestException extends Exception {};
     
     static private MOBEndpoint endpoint;
     static private Principal principal;
@@ -90,17 +97,20 @@ public class MOBEndpointTest {
     }
     
     @Test
-    public void shouldDoNothingOnAfterBegin() throws EJBException, RemoteException {
+    public void shouldDoNothingOnAfterBegin()
+            throws EJBException, RemoteException {
         endpoint.afterBegin();
     }
     
     @Test
-    public void shouldDoNothingOnBeforeCompletion() throws EJBException, RemoteException {
+    public void shouldDoNothingOnBeforeCompletion()
+            throws EJBException, RemoteException {
         endpoint.beforeCompletion();
     }
     
     @Test
-    public void shouldDoNothingOnAfterCompletion() throws EJBException, RemoteException {
+    public void shouldDoNothingOnAfterCompletion()
+            throws EJBException, RemoteException {
         endpoint.afterCompletion(true);
         endpoint.afterCompletion(false);
     }
@@ -116,11 +126,55 @@ public class MOBEndpointTest {
     }
 
     @Test(expected = ValidationException.class)
-    public void shouldThrowOnBorrowingNonExistentBook() throws TransactionRolledbackException {
+    public void shouldThrowOnBorrowingNonExistentBook()
+            throws TransactionRolledbackException {
         Book book = mock(Book.class);
         when(book.getIdBook()).thenReturn(Integer.MIN_VALUE);
         when(endpoint.bookFacade.find(Integer.MIN_VALUE)).thenReturn(null);
         
         endpoint.borrowBook(book, "test_login");
     }
+    
+    @Test
+    public void shouldBorrowExistentBook()
+            throws TransactionRolledbackException {
+        Book book = new Book("A", "B", 1992);
+        when(endpoint.bookFacade.find(anyInt())).thenReturn(book);
+        
+        ArgumentCaptor captor = ArgumentCaptor.forClass(Rental.class);
+        doNothing().when(endpoint.rentalFacade).create((Rental)captor.capture());
+        
+        endpoint.borrowBook(book, "test_login");
+        
+        Rental resultRental = (Rental)captor.getValue();
+        Account resultAccount = resultRental.getAccount();
+        Book resultBook = resultRental.getBook();
+        
+        Assert.assertTrue(resultRental.isActive());
+        
+        Assert.assertEquals(new Integer(1), resultAccount.getIdAccount());
+        Assert.assertEquals("MockAccount", resultAccount.getLogin());
+        Assert.assertEquals("Mock1", resultAccount.getName());
+        Assert.assertEquals("Mock2", resultAccount.getSurname());
+        Assert.assertEquals(new Date(1970, 1, 1), resultAccount.getBirthDate());
+        
+        Assert.assertEquals("A", resultBook.getTitle());
+        Assert.assertEquals("B", resultBook.getAuthor());
+        Assert.assertEquals(1992, resultBook.getYear());
+    }
+    
+// TODO: Use PowerMockito to perform the following test
+//    @Test(expected = TestException.class)
+//    public void shouldReactOnConstraintViolationWhenBorrowingBook()
+//            throws TransactionRolledbackException {
+//        Book book = new Book("A", "B", 1992);
+//        when(endpoint.bookFacade.find(anyInt())).thenReturn(book);
+//        doThrow(new ConstraintViolationException(new HashSet<>())).
+////        doNothing().
+//                when(endpoint.rentalFacade).create(any(Rental.class));
+////        doNothing().when(MOBEndpoint.loger).log(anyVararg());
+//        doThrow(TestException.class).when(MOBEndpoint.loger).log(anyVararg());
+//            
+//        endpoint.borrowBook(book, "test_login");
+//    }
 }
