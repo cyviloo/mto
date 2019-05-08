@@ -26,9 +26,9 @@ import edu.p.lodz.pl.mto.mob.dao.BookFacadeLocal;
 public class BookFacade implements BookFacadeLocal{
 
     @PersistenceContext(unitName = "mtomob_pu")
-    private EntityManager em;
+    EntityManager em;
     
-     protected static final Logger loger = Logger.getGlobal();
+    protected static final Logger loger = Logger.getGlobal();
 
     protected EntityManager getEntityManager() {
         return em;
