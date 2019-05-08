@@ -27,7 +27,7 @@ import javax.transaction.TransactionRolledbackException;
 public class RentalFacade implements RentalFacadeLocal {
 
     @PersistenceContext(unitName = "mtomob_pu")
-    private EntityManager em;
+    EntityManager em;
 
     protected static final Logger loger = Logger.getGlobal();
 
