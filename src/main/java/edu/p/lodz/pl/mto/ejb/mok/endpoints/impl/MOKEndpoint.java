@@ -34,13 +34,13 @@ import javax.transaction.TransactionRolledbackException;
 public class MOKEndpoint implements MOKEndpointLocal, SessionSynchronization {
     
     @EJB
-    private AccountFacadeMOKLocal accountFacade;
+    AccountFacadeMOKLocal accountFacade;
     @Resource
-    private SessionContext sessionContext;
+    SessionContext sessionContext;
     
-    protected static final Logger loger = Logger.getGlobal();
+    static final Logger loger = Logger.getGlobal();
     
-    private long transactionID;
+    long transactionID;
     
     @Override
     @PermitAll
