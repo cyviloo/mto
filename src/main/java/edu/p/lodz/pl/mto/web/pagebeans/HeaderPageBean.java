@@ -22,7 +22,7 @@ import javax.servlet.http.HttpSession;
 public class HeaderPageBean {
     
     @Inject
-    private AccountSession accountSession;
+    AccountSession accountSession;
     
     @PermitAll
     public String showCurrentUser()

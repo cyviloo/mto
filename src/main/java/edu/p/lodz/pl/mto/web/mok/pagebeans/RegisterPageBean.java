@@ -22,7 +22,7 @@ import javax.inject.Named;
 public class RegisterPageBean {
     
     @Inject
-    private AccountSession accountSession;
+    AccountSession accountSession;
     
     private Account account;
     
