@@ -5,28 +5,32 @@
  */
 package edu.p.lodz.pl.mto.mob.dao.impl;
 
+import edu.p.lodz.pl.mto.entities.Account;
 import edu.p.lodz.pl.mto.entities.Rental;
 import java.util.Arrays;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import javax.transaction.TransactionRolledbackException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 /**
  *
- * @author Tomasz
+ * @author Borys
  */
 public class RentalFacadeTest {
     
     private class TestException extends Exception {}
     
-    private RentalFacade rentalFacade;
-    private TypedQuery<Rental> tq;
-    private Rental rental1, rental2;
+    private final RentalFacade rentalFacade;
+    private final TypedQuery<Rental> tq;
+    private final Rental rental1;
+    private final Rental rental2;
     
     public RentalFacadeTest() {
         rentalFacade = new RentalFacade();
@@ -45,6 +49,7 @@ public class RentalFacadeTest {
         when(rentalFacade.em.createNamedQuery(anyString(), eq(Rental.class)))
                 .thenReturn(tq);
         when(rentalFacade.em.find(eq(Rental.class), any())).thenReturn(rental1);
+        when(tq.setParameter(anyString(), eq(Account.class))).thenReturn(tq);
         doNothing().when(rentalFacade.em).persist(eq(Rental.class));
         doNothing().when(rentalFacade.em).flush();
         when(rentalFacade.em.merge(eq(Rental.class))).thenReturn(null);
@@ -86,4 +91,25 @@ public class RentalFacadeTest {
         rentalFacade.edit(rental1);
     }
     
+    @Test
+    public void shouldReturnRentalsByUser()
+            throws TransactionRolledbackException {
+        Account account = new Account();
+        List<Rental> list = rentalFacade.findByUser(account);
+        
+        Assert.assertEquals(2, list.size());
+        Assert.assertEquals(rental1, list.get(0));
+        Assert.assertEquals(rental2, list.get(1));
+    }
+    
+    @Test
+    public void shouldReturnRentalsHistoryByUser()
+            throws TransactionRolledbackException {
+        Account account = new Account();
+        List<Rental> list = rentalFacade.findHistoryByUser(account);
+        
+        Assert.assertEquals(2, list.size());
+        Assert.assertEquals(rental1, list.get(0));
+        Assert.assertEquals(rental2, list.get(1));
+    }
 }

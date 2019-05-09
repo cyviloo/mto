@@ -13,18 +13,18 @@ import javax.transaction.TransactionRolledbackException;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
  *
- * @author Tomasz
+ * @author Borys
  */
 public class BookFacadeTest {
     
-    private BookFacade bookFacade;
-    private TypedQuery<Book> tq;
-    private Book book1, book2;
+    private final BookFacade bookFacade;
+    private final TypedQuery<Book> tq;
+    private final Book book1;
+    private final Book book2;
     
     public BookFacadeTest() {
         bookFacade = new BookFacade();

@@ -3,17 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.p.lodz.pl.mto.entities.test;
+package edu.p.lodz.pl.mto.entities;
 
-import edu.p.lodz.pl.mto.entities.Book;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
- * @author Tomasz
+ * @author Borys
  */
 public class BookTest {
     

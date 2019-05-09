@@ -1,6 +1,5 @@
-package edu.p.lodz.pl.mto.entities.test;
+package edu.p.lodz.pl.mto.entities;
 
-import edu.p.lodz.pl.mto.entities.Book;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
