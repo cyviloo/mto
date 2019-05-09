@@ -29,12 +29,12 @@ import javax.inject.Named;
 public class BorrowBookPageBean {
     
     @Inject
-    private MOBSession mobSession;
+    MOBSession mobSession;
     @Inject
-    private AccountSession accountSession;
+    AccountSession accountSession;
 
     private List<Book> books;
-    private DataModel<Book> bookDataModel;
+    DataModel<Book> bookDataModel;
   
     
     public DataModel<Book> getBookDataModel() { return bookDataModel; }
@@ -50,7 +50,7 @@ public class BorrowBookPageBean {
         bookDataModel = new ListDataModel<>(listOutput);
     }
     
-      public String borrowBook()
+    public String borrowBook()
     {
         mobSession.borrowBook(bookDataModel.getRowData(), accountSession.showCurrentUser());
         

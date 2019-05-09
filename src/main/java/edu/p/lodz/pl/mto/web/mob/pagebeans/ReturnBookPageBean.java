@@ -27,10 +27,10 @@ import javax.inject.Named;
 @MessagingApplicationExceptionHandler
 public class ReturnBookPageBean {
      @Inject
-    private MOBSession mobSession;
+    MOBSession mobSession;
 
     private List<Rental> rentals;
-    private DataModel<Rental> rentalDataModel;
+    DataModel<Rental> rentalDataModel;
   
     
     public DataModel<Rental> getRentalDataModel() { return rentalDataModel; }
