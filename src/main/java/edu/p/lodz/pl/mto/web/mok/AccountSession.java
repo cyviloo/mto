@@ -32,10 +32,10 @@ public class AccountSession implements Serializable {
     
     //@Resource(name = "messagesBean")
     @Inject
-    private MessagesBean messagesBean;
+    MessagesBean messagesBean;
     
     @EJB
-    private MOKEndpointLocal mOKEndpoint;
+    MOKEndpointLocal mOKEndpoint;
     
     @PermitAll
     public void registerAccount(Account account) throws ValidationException {

@@ -30,11 +30,11 @@ import javax.inject.Named;
 public class MOBSession implements Serializable {
 
     @EJB
-    private MOBEndpointLocal mOBEndpoint;
+    MOBEndpointLocal mOBEndpoint;
 
     //@Resource(name = "messagesBean")
     @Inject
-    private MessagesBean messagesBean;
+    MessagesBean messagesBean;
 
     @PermitAll
     public List<Book> getAllBooks() {
