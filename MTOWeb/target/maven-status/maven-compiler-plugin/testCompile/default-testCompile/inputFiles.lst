@@ -1,0 +1,17 @@
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/mob/dao/impl/BookFacadeTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/mob/pagebeans/BorrowBookPageBeanTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/pagebeans/MenuPageBeanTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/mob/dao/impl/RentalFacadeTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/mok/pagebeans/LoginPageBeanTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/ejb/mok/endpoints/impl/MOKEndpointTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/mok/AccountSessionTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/mob/MOBSessionTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/pagebeans/HeaderPageBeanTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/mok/dao/impl/AccountFacadeTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/entities/RentalTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/ejb/mob/endpoints/impl/MOBEndpointTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/mok/pagebeans/RegisterPageBeanTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/entities/BookPersistanceTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/entities/BookTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/entities/AccountTest.java
+/home/mto/NetBeansProjects/MTO/MTOWeb/src/test/java/edu/p/lodz/pl/mto/web/mob/pagebeans/ReturnBookPageBeanTest.java

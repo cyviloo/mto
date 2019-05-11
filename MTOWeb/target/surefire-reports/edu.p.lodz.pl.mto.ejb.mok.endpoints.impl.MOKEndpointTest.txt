@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: edu.p.lodz.pl.mto.ejb.mok.endpoints.impl.MOKEndpointTest
+-------------------------------------------------------------------------------
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.045 sec
