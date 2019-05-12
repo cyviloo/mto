@@ -84,12 +84,12 @@
             <scope>runtime</scope>
             <version>2.26</version>
         </dependency>-->
-        <dependency>
+<!--        <dependency>
             <groupId>org.glassfish.main.extras</groupId>
             <artifactId>glassfish-embedded-all</artifactId>
             <version>4.1</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
