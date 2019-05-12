@@ -11,6 +11,7 @@ import edu.p.lodz.pl.mto.enums.MessageLevel;
 import edu.p.lodz.pl.mto.exceptions.MessagingApplicationException;
 import edu.p.lodz.pl.mto.exceptions.ValidationException;
 import edu.p.lodz.pl.mto.mok.dao.AccountFacadeMOKLocal;
+import edu.p.lodz.pl.mto.utils.AccountService;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +36,8 @@ public class MOKEndpoint implements MOKEndpointLocal, SessionSynchronization {
     
     @EJB
     AccountFacadeMOKLocal accountFacade;
+    @EJB
+    AccountService accountService;
     @Resource
     SessionContext sessionContext;
     
@@ -47,15 +50,9 @@ public class MOKEndpoint implements MOKEndpointLocal, SessionSynchronization {
     public void registerAccount(Account account)
     {
        
-        try
+        if (accountService.findByLogin(account.getLogin()) != null)
         {
-            if (accountFacade.findByLogin(account.getLogin()) != null)
-            {
-                throw new ValidationException("Login already taken", MessageLevel.ERROR);
-            }
-        } catch (TransactionRolledbackException ex)
-        {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
+            throw new ValidationException("Login already taken", MessageLevel.ERROR);
         }      
 
         Account accountRegistry = new Account();
@@ -65,13 +62,7 @@ public class MOKEndpoint implements MOKEndpointLocal, SessionSynchronization {
         accountRegistry.setSurname(account.getSurname());
         accountRegistry.setBirthDate(account.getBirthDate());
 
-        try
-        {
-            accountFacade.create(accountRegistry);
-        } catch (TransactionRolledbackException ex)
-        {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
-        }
+        accountService.create(accountRegistry);
     }
 
     @Override
@@ -79,13 +70,7 @@ public class MOKEndpoint implements MOKEndpointLocal, SessionSynchronization {
     public Account getAccountByLogin(String login)
     {
         Account account;
-        try
-        {
-            account = accountFacade.findByLogin(login);
-        } catch (TransactionRolledbackException ex)
-        {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
-        }
+        account = accountService.findByLogin(login);
 
         if (account == null)
         {

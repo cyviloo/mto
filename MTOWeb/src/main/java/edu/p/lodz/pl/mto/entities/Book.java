@@ -30,38 +30,15 @@ import org.eclipse.persistence.annotations.Customizer;
  *
  * @author Tomasz
  */
-@Customizer(ConfigureRentalFilter.class)
-@Entity
-@Table(name = "book")
-@TableGenerator(name = "Book_Generator", table = "generator", pkColumnName = "name", valueColumnName = "value", pkColumnValue = "book", allocationSize = 1)
-@NamedQueries({
-    @NamedQuery(name = "Book.findAll", query = "SELECT f FROM Book f")
-    ,
-    @NamedQuery(name = "Book.findByTitle", query = "SELECT f FROM Book f WHERE f.title = :title")})
+
 public class Book implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "Book_Generator")
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_book", nullable = false)
     private Integer idBook;
-    @Basic(optional = false)
-    @NotNull(message = "Title is required")
-    @Size(min = 1, max = 80, message = "Title field has wrong length")
-    @Column(name = "title", nullable = false, length = 100)
     private String title;
-    @Basic(optional = false)
-    @NotNull(message = "Author is required")
-    @Size(min = 1, max = 80, message = "Author field has wrong length")
-    @Column(name = "author", nullable = false, length = 1000)
     private String author;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "year_published", nullable = false)
     private int year;
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "book")
     private Rental rentalList;
+    private boolean active;
 
     public Book() {
     }
@@ -157,6 +134,41 @@ public class Book implements Serializable {
      */
     public void setIdBook(Integer idBook) {
         this.idBook = idBook;
+    }
+
+    /**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+     * @param author the author to set
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    /**
+     * @return the active
+     */
+    public boolean isActive() {
+        return active;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

@@ -16,6 +16,9 @@ import edu.p.lodz.pl.mto.exceptions.ValidationException;
 import edu.p.lodz.pl.mto.mob.dao.BookFacadeLocal;
 import edu.p.lodz.pl.mto.mob.dao.RentalFacadeLocal;
 import edu.p.lodz.pl.mto.mok.dao.AccountFacadeMOKLocal;
+import edu.p.lodz.pl.mto.utils.AccountService;
+import edu.p.lodz.pl.mto.utils.BookService;
+import edu.p.lodz.pl.mto.utils.RentalService;
 import edu.p.lodz.pl.mto.web.mok.AccountSession;
 import java.rmi.RemoteException;
 import java.util.Date;
@@ -52,6 +55,12 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
     AccountFacadeMOKLocal accountFacade;
     @EJB
     RentalFacadeLocal rentalFacade;
+    @EJB
+    AccountService accountService;
+    @EJB
+    RentalService rentalService;
+    @EJB
+    BookService bookService;
     @Inject
     AccountSession accountSession;
 
@@ -62,11 +71,7 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
     @Override
     @PermitAll
     public List<Book> getAllBooks() {
-        try {
-            return bookFacade.getAllBooks();
-        } catch (TransactionRolledbackException ex) {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
-        }
+        return bookService.getAllBooks();
     }
 
     @Override
@@ -91,11 +96,7 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
         Account acc = fetchAccountFromSession();
 
         Book bookToBorrow;
-        try {
-            bookToBorrow = bookFacade.find(book.getIdBook());
-        } catch (TransactionRolledbackException ex) {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
-        }
+        bookToBorrow = bookService.find(book.getIdBook().toString());
 
         if (bookToBorrow == null) {
             throw new ValidationException("Book not exist", MessageLevel.ERROR);
@@ -107,12 +108,10 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
         rentalToCreate.setStartDate(new Date());
 
         try {
-            rentalFacade.create(rentalToCreate);
+            rentalService.create(rentalToCreate);
         } catch (ConstraintViolationException e) {
             loger.log(Level.SEVERE, "Exception: ");
             e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
-        } catch (TransactionRolledbackException ex) {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
         }
 
     }
@@ -123,12 +122,10 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
         Account acc = fetchAccountFromSession();
         List<Rental> userRentals = null;
         try {
-            userRentals = rentalFacade.findByUser(acc);
+            userRentals = rentalService.findByUser(acc);
         } catch (ConstraintViolationException e) {
             loger.log(Level.SEVERE, "Exception: ");
             e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
-        } catch (TransactionRolledbackException ex) {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
         }
         return userRentals;
     }
@@ -137,11 +134,7 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
     public void returnBook(Rental rental) {
         rental.setEndDate(new Date());
         rental.setActive(false);
-        try {
-            rentalFacade.edit(rental);
-        } catch (TransactionRolledbackException ex) {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
-        }
+        rentalService.edit(rental);
     }
 
     @Override
@@ -149,12 +142,10 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
         Account acc = fetchAccountFromSession();
         List<Rental> userHistoryRentals = null;
         try {
-            userHistoryRentals = rentalFacade.findHistoryByUser(acc);
+            userHistoryRentals = rentalService.findHistoryByUser(acc);
         } catch (ConstraintViolationException e) {
             loger.log(Level.SEVERE, "Exception: ");
             e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
-        } catch (TransactionRolledbackException ex) {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
         }
         return userHistoryRentals;
     }
@@ -162,11 +153,7 @@ public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
     @Override
     public Account fetchAccountFromSession(){
         Account acc;
-        try {
-            acc = accountFacade.findByLogin(accountSession.showCurrentUser());
-        } catch (TransactionRolledbackException ex) {
-            throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
-        }
+        acc = accountService.findByLogin(accountSession.showCurrentUser());
 
         if (acc == null) {
             throw new ValidationException("Account not exist", MessageLevel.ERROR);

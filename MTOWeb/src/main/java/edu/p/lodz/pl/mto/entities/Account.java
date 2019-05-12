@@ -29,42 +29,14 @@ import javax.validation.constraints.Size;
  *
  * @author Tomasz
  */
-@Entity
-@Table(name = "account", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"login"})})
-@TableGenerator(name = "Account_Generator", table = "generator", pkColumnName = "name", valueColumnName = "value", pkColumnValue = "account", allocationSize = 1)
-@NamedQueries({
-    @NamedQuery(name = "Account.findAll", query = "SELECT a FROM Account a"),
-    @NamedQuery(name = "Account.findByLogin", query = "SELECT a FROM Account a WHERE a.login = :login")})
+
 public class Account implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "Account_Generator")
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_account", nullable = false)
     private Integer idAccount;
-    @Pattern(regexp = "[a-zA-Z0-9]+", message = "Login can only consist of lower and upper case letters and digits.")
-    @Basic(optional = false)
-    @NotNull(message = "Account login required")
-    @Size(min = 1, max = 25, message = "Wrong length")
-    @Column(name = "login", nullable = false, length = 25)
     private String login;
-    @Basic(optional = false)
-    @NotNull(message = "Account name required")
-    @Size(min = 1, max = 25, message = "Wrong length")
-    @Column(name = "name", nullable = false, length = 25)
     private String name;
-    @Basic(optional = false)
-    @NotNull(message = "Account lastname required")
-    @Size(min = 1, max = 25, message = "Wrong length")
-    @Column(name = "surname", nullable = false, length = 25)
     private String surname;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "birth_date", nullable = false)
-    @Temporal(TemporalType.DATE)
     private Date birthDate;
    
     

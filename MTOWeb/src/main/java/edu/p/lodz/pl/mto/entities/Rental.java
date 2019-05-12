@@ -5,64 +5,42 @@
  */
 package edu.p.lodz.pl.mto.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author Tomasz
  */
-@Entity
-@Table(name = "rental")
-@TableGenerator(name = "Rental_Generator", table = "generator", pkColumnName = "name", valueColumnName = "value", pkColumnValue = "rental", allocationSize = 1)
-@NamedQueries({
-    @NamedQuery(name = "Rental.findHistoryByUser", query = "SELECT r FROM Rental r WHERE r.account = :account"),
-    @NamedQuery(name = "Rental.findByUser", query = "SELECT r FROM Rental r WHERE r.account = :account AND r.active = true")})
+//@JsonAutoDetect
+//@Entity
 public class Rental implements Serializable {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "Rental_Generator")
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_rental", nullable = false)
+//    @Id
     private Integer idRental;
-    @JoinColumn(name = "id_book", referencedColumnName = "id_book", nullable = false)
-    @ManyToOne(optional = false)
     private Book book;
-    @JoinColumn(name = "id_account", referencedColumnName = "id_account", nullable = false)
-    @ManyToOne(optional = false)
     private Account account;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "start_date", nullable = false)
-    @Temporal(TemporalType.DATE)
+    //@JsonDeserialize(using = CustomDateDeserializer.class)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     private Date startDate;
-    @Basic(optional = false)
-    @Column(name = "end_date", nullable = false)
-    @Temporal(TemporalType.DATE)
     private Date endDate;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "active", nullable = false)
     private boolean active;
 
     public Rental() {
 }
+//    @JsonCreator
+//    public Rental(@JsonProperty("idRental") Integer idRental, 
+//            @JsonProperty("book") Book book,@JsonProperty("account") Account account, @JsonProperty("startDate") Date startDate,
+//            @JsonProperty("endDate") Date endDate, @JsonProperty("active") boolean active) {
+//        this.idRental = idRental;
+//        this.book = book;
+//        this.account = account;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//        this.active = active;
+//        
+//    }
     
     public Integer getIdRental() {
         return idRental;
@@ -103,6 +81,7 @@ public class Rental implements Serializable {
     /**
      * @return the startDate
      */
+     //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     public Date getStartDate() {
         return startDate;
     }
@@ -110,6 +89,9 @@ public class Rental implements Serializable {
     /**
      * @param startDate the startDate to set
      */
+//    @JsonSetter("startDate")
+    //@JsonDeserialize(using = CustomDateDeserializer.class)
+    //@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd-MM-yyyy")
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
