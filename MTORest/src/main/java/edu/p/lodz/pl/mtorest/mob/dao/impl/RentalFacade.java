@@ -24,11 +24,11 @@ import javax.transaction.TransactionRolledbackException;
  * @author Tomasz
  */
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class RentalFacade implements RentalFacadeLocal {
 
     @PersistenceContext(unitName = "mtomob_pu")
-    private EntityManager em;
+    EntityManager em;
 
     protected static final Logger loger = Logger.getGlobal();
 
@@ -37,7 +37,7 @@ public class RentalFacade implements RentalFacadeLocal {
     }
 
     @Override
-    public Integer create(Rental entity) {
+    public int create(Rental entity) {
         getEntityManager().persist(entity);
         getEntityManager().flush();
         return entity.getIdRental();
@@ -47,11 +47,6 @@ public class RentalFacade implements RentalFacadeLocal {
     public void edit(Rental entity) {
         getEntityManager().merge(entity);
         getEntityManager().flush();
-    }
-
-    @Override
-    public Rental find(Object id) {
-        return getEntityManager().find(Rental.class, id);
     }
 
     @Override
@@ -67,5 +62,12 @@ public class RentalFacade implements RentalFacadeLocal {
         tq.setParameter("account", account);
         return tq.getResultList();
     }
+    
+    @Override
+    public Rental find(Object id) {
+        return getEntityManager().find(Rental.class, id);
+    }
+
 
 }
+

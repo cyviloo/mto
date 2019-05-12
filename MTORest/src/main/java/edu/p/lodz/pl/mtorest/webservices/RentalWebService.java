@@ -100,8 +100,7 @@ public class RentalWebService {
     }
     
     @PUT
-    @Path("{edit}")
-    public Response edit(@Valid Rental rental) {
+    public Response edit(Rental rental) {
         boolean hasRental = false;
         try {
             hasRental = rentalFacade.find(rental.getIdRental()) != null;
@@ -111,6 +110,9 @@ public class RentalWebService {
         if (hasRental) {
             try {
             rentalFacade.edit(rental);
+        } catch (ConstraintViolationException e) {
+            loger.log(Level.SEVERE, "Exception: ");
+            e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
         } catch (TransactionRolledbackException ex) {
             //throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
         }

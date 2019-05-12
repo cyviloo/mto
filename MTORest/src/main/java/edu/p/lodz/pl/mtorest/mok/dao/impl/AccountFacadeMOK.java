@@ -28,9 +28,9 @@ import javax.validation.ConstraintViolationException;
 public class AccountFacadeMOK  implements AccountFacadeMOKLocal {
 
     @PersistenceContext(unitName = "mtomok_pu")
-    private EntityManager em;
-    
-     protected static final Logger loger = Logger.getGlobal();
+    EntityManager em;
+
+    protected static final Logger loger = Logger.getGlobal();
 
     protected EntityManager getEntityManager() {
         return em;

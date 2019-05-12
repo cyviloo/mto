@@ -26,9 +26,9 @@ import edu.p.lodz.pl.mtorest.mob.dao.BookFacadeLocal;
 public class BookFacade implements BookFacadeLocal{
 
     @PersistenceContext(unitName = "mtomob_pu")
-    private EntityManager em;
-    
-     protected static final Logger loger = Logger.getGlobal();
+    EntityManager em;
+
+    protected static final Logger loger = Logger.getGlobal();
 
     protected EntityManager getEntityManager() {
         return em;
@@ -40,8 +40,15 @@ public class BookFacade implements BookFacadeLocal{
         return tq.getResultList();
     }
     @Override
-     public Book find(Object id) {
-        return getEntityManager().find(Book.class, id);
+     public Book find(Object bookId) {
+        //return getEntityManager().find(Book.class, id);
+        TypedQuery<Book> tq = em.createNamedQuery("Book.findById", Book.class);
+        tq.setParameter("idBook", bookId);
+        List<Book> acc = tq.getResultList();
+        if (acc.isEmpty()) {
+            return null;
+        }
+        return acc.get(0);
     }
     
 }

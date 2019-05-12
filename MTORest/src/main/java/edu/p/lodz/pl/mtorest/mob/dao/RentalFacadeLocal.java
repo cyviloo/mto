@@ -18,17 +18,14 @@ import javax.transaction.TransactionRolledbackException;
 @Local
 public interface RentalFacadeLocal {
 
-    public Integer create(Rental entity) throws TransactionRolledbackException;
-
-    //public List<Rental> findByUser(Integer idAccount)throws TransactionRolledbackException;
+    public int create(Rental entity) throws TransactionRolledbackException;
+    
+    public Rental find(Object id) throws TransactionRolledbackException;
 
     public List<Rental> findByUser(Account account) throws TransactionRolledbackException;
 
     public void edit(Rental entity) throws TransactionRolledbackException;
 
     public List<Rental> findHistoryByUser(Account acc) throws TransactionRolledbackException;
-    
-    public Rental find(Object id) throws TransactionRolledbackException;
-
     
 }
