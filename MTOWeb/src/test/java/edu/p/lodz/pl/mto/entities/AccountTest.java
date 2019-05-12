@@ -62,4 +62,15 @@ public class AccountTest {
         Assert.assertEquals(
                 "edu.p.lodz.pl.mto.entities.Account[ id=111 ]", account.toString());
     }
+    
+    @Test
+    public void shouldReturnZeroHashCodeOnNullId() {
+        account.setIdAccount(null);
+        Assert.assertEquals(0, account.hashCode());
+    }
+    
+    @Test
+    public void shouldReturnIdHashCodeOnNotNullId() {
+        Assert.assertEquals(account.getIdAccount().hashCode(), account.hashCode());
+    }
 }

@@ -48,4 +48,15 @@ public class BookTest {
         Assert.assertEquals(
                 "edu.p.lodz.pl.mto.entities.Book[ id=666 ]", book.toString());
     }
+    
+    @Test
+    public void shouldReturnZeroHashCodeOnNullId() {
+        book.setIdBook(null);
+        Assert.assertEquals(0, book.hashCode());
+    }
+    
+    @Test
+    public void shouldReturnIdHashCodeOnNotNullId() {
+        Assert.assertEquals(book.getIdBook().hashCode(), book.hashCode());
+    }
 }
