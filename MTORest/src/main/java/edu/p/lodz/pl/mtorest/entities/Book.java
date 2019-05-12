@@ -5,9 +5,11 @@
  */
 package edu.p.lodz.pl.mtorest.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.p.lodz.pl.mtorest.utils.ConfigureRentalFilter;
 import java.io.Serializable;
@@ -26,6 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.eclipse.persistence.annotations.Customizer;
@@ -40,6 +43,7 @@ import org.eclipse.persistence.annotations.Customizer;
 @TableGenerator(name = "Book_Generator", table = "generator", pkColumnName = "name", valueColumnName = "value", pkColumnValue = "book", allocationSize = 1)
 @NamedQueries({
     @NamedQuery(name = "Book.findAll", query = "SELECT f FROM Book f"),
+    @NamedQuery(name = "Book.findById", query = "SELECT f FROM Book f WHERE f.idBook = :idBook"),
     @NamedQuery(name = "Book.findByTitle", query = "SELECT f FROM Book f WHERE f.title = :title")})
 public class Book implements Serializable {
 
@@ -64,8 +68,12 @@ public class Book implements Serializable {
     @Column(name = "year_published", nullable = false)
     private int year;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "book")
-    @JsonManagedReference
+    //@JsonBackReference
+    @JsonIgnore
     private Rental rentalList;
+    @Transient
+    @JsonProperty("active")
+    private boolean active;
 
     public Book() {
     }
@@ -75,7 +83,14 @@ public class Book implements Serializable {
         this.title = title;
         this.year = year;
     }
-
+    
+    public Book(String title, String author, int year, Rental rentalList) {
+        this.author = author;
+        this.title = title;
+        this.year = year;
+        this.rentalList = rentalList;
+    }
+ 
     @Override
     public int hashCode() {
         int hash = 0;
@@ -98,7 +113,7 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.p.lodz.pl.mto.entities.Book[ id=" + getIdBook() + " ]";
+        return "edu.p.lodz.pl.mtorest.entities.Book[ id=" + getIdBook() + " ]";
     }
 
     /**
@@ -106,6 +121,12 @@ public class Book implements Serializable {
      */
     public String getTitle() {
         return title;
+    }
+/**
+     * @param title the title to set
+     */
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     /**
@@ -142,12 +163,12 @@ public class Book implements Serializable {
         return rentalList;
     }
 
-    /**
-     * @param rentalList the rentalList to set
-     */
-    public void setRentalList(Rental rentalList) {
-        this.rentalList = rentalList;
-    }
+//    /**
+//     * @param rentalList the rentalList to set
+//     */
+//    public void setRentalList(Rental rentalList) {
+//        this.rentalList = rentalList;
+//    }
 
     /**
      * @return the idBook
@@ -161,6 +182,39 @@ public class Book implements Serializable {
      */
     public void setIdBook(Integer idBook) {
         this.idBook = idBook;
+    }
+
+    
+    /**
+     * @param author the author to set
+     */
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    /**
+     * @return the active
+     */
+    @JsonProperty("active")
+    public boolean isActive() {
+        if (this.rentalList!=null){
+            return true;
+        } else return false;
+    }
+
+    /**
+     * @param active the active to set
+     */
+    @JsonIgnore
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
 }

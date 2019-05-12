@@ -171,7 +171,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "edu.p.lodz.pl.mtorest.Account[ id=" + idAccount + " ]";
+        return "edu.p.lodz.pl.mtorest.entities.Account[ id=" + idAccount + " ]";
     }
 
     
