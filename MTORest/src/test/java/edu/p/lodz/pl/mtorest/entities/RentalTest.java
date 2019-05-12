@@ -77,4 +77,15 @@ public class RentalTest {
         Assert.assertEquals(rental.toString(),
                 "edu.p.lodz.pl.mtorest.entities.Rental[ id=333 ]");
     }
+    
+    @Test
+    public void shouldReturnZeroHashCodeOnNullId() {
+        rental.setIdRental(null);
+        Assert.assertEquals(0, rental.hashCode());
+    }
+    
+    @Test
+    public void shouldReturnIdHashCodeOnNotNullId() {
+        Assert.assertEquals(rental.getIdRental().hashCode(), rental.hashCode());
+    }
 }
