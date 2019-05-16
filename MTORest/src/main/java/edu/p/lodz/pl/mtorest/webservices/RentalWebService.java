@@ -5,7 +5,8 @@
  */
 package edu.p.lodz.pl.mtorest.webservices;
 
-import edu.p.lodz.pl.mtorest.entities.Account;
+import edu.p.lodz.pl.mtorest.ejb.mob.endpoints.MOBEndpointLocal;
+import edu.p.lodz.pl.mtorest.ejb.mok.endpoints.MOKEndpointLocal;
 import edu.p.lodz.pl.mtorest.entities.Rental;
 import edu.p.lodz.pl.mtorest.mob.dao.RentalFacadeLocal;
 import edu.p.lodz.pl.mtorest.mok.dao.AccountFacadeMOKLocal;
@@ -14,10 +15,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.transaction.TransactionRolledbackException;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -32,6 +33,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Tomasz
  */
+@RequestScoped
 @Path("/rental")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -43,19 +45,23 @@ public class RentalWebService {
     @Inject
     @SuppressWarnings("unused")
     private AccountFacadeMOKLocal accountFacade;
-    
+    @EJB
+    private MOKEndpointLocal accountMok;
+    @EJB
+    private MOBEndpointLocal mOBEndpoint;
+
     static Logger loger = Logger.getGlobal();
 
     @POST
-    public Response createRental(@Valid Rental rentalToCreate) {
+    public Response createRental(Rental rental) {
+
         Integer id = null;
         try {
-            id = rentalFacade.create(rentalToCreate);
+
+            id = mOBEndpoint.borrowBook(rental.getBook(), rental.getAccount().getLogin());
         } catch (ConstraintViolationException e) {
             loger.log(Level.SEVERE, "Exception: ");
             e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
-        } catch (TransactionRolledbackException ex) {
-           // throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
         }
         URI location;
         try {
@@ -65,59 +71,38 @@ public class RentalWebService {
         }
         return Response.created(location).build();
     }
-    
+
     @GET
-    @Path("/history/{accountId}")
-    public Response findHistoryByUser(@PathParam("accountId") int accountId) {
+    @Path("/history/{login}")
+    public Response findHistoryByUser(@PathParam("login") String login) {
         List<Rental> userHistoryRentals = null;
         try {
-            Account account = accountFacade.find(accountId);
-             userHistoryRentals = rentalFacade.findHistoryByUser(account);
+            userHistoryRentals = mOBEndpoint.getHistoryRentalsByUser(login);
         } catch (ConstraintViolationException e) {
             loger.log(Level.SEVERE, "Exception: ");
             e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
-        } catch (TransactionRolledbackException ex) {
-            //throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
         }
         return Response.ok(userHistoryRentals).build();
     }
 
     @GET
-    @Path("{accountId}")
-    public Response findByUser(@PathParam("accountId") int accountId) {
+    @Path("{login}")
+    public Response findByUser(@PathParam("login") String login) {
         List<Rental> userRentals = null;
-        
+
         try {
-            Account account = accountFacade.find(accountId);
-            userRentals = rentalFacade.findByUser(account);
+            userRentals = mOBEndpoint.getRentalsByUser(login);
         } catch (ConstraintViolationException e) {
             loger.log(Level.SEVERE, "Exception: ");
             e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
-        } catch (TransactionRolledbackException ex) {
-            //throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
         }
         return Response.ok(userRentals).build();
     }
-    
+
     @PUT
     public Response edit(Rental rental) {
-        boolean hasRental = false;
-        try {
-            hasRental = rentalFacade.find(rental.getIdRental()) != null;
-        } catch (TransactionRolledbackException ex) {
-            ///to do
-        }
-        if (hasRental) {
-            try {
-            rentalFacade.edit(rental);
-        } catch (ConstraintViolationException e) {
-            loger.log(Level.SEVERE, "Exception: ");
-            e.getConstraintViolations().forEach(err -> loger.log(Level.SEVERE, err.toString()));
-        } catch (TransactionRolledbackException ex) {
-            //throw new MessagingApplicationException(MessageLevel.FATAL, "Transaction rollbacked", ex);
-        }
-            return Response.noContent().build();
-        }
-        return Response.status(Response.Status.NOT_FOUND).build();
+        mOBEndpoint.returnBook(rental);
+
+        return Response.noContent().build();
     }
 }
