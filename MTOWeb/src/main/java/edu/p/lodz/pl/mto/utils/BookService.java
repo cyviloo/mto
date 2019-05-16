@@ -23,7 +23,6 @@ import javax.ws.rs.core.MediaType;
  * @author Tomasz
  */
 @Singleton
-@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class BookService {
     private Client client;
     private WebTarget target;

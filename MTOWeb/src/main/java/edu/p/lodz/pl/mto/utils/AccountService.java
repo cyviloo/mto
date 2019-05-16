@@ -25,7 +25,6 @@ import javax.ws.rs.core.Response;
  * @author Tomasz
  */
 @Singleton
-@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class AccountService {
     
     private Client client;
@@ -39,11 +38,11 @@ public class AccountService {
                 ;
     }
 
-    public Account findByLogin(String login) {
+    public Account getAccountByLogin(String login) {
         return target.path(login).request(MediaType.APPLICATION_JSON).get(Account.class);
     }
 
-    public void create(Account account) {
+    public void registerAccount(Account account) {
 
     Response response = target.request().post(Entity.entity(account, MediaType.APPLICATION_JSON));
         if (response.getStatus() != 201) {
