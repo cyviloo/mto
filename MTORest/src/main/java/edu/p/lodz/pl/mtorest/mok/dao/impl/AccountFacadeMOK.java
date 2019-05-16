@@ -24,7 +24,7 @@ import javax.validation.ConstraintViolationException;
  * @author Tomasz
  */
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class AccountFacadeMOK  implements AccountFacadeMOKLocal {
 
     @PersistenceContext(unitName = "mtomok_pu")

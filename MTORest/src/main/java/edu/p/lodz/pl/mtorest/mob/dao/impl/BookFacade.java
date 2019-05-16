@@ -14,7 +14,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.transaction.TransactionRolledbackException;
 import edu.p.lodz.pl.mtorest.mob.dao.BookFacadeLocal;
 
 /**
@@ -22,7 +21,7 @@ import edu.p.lodz.pl.mtorest.mob.dao.BookFacadeLocal;
  * @author Tomasz
  */
 @Stateless
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+@TransactionAttribute(TransactionAttributeType.MANDATORY)
 public class BookFacade implements BookFacadeLocal{
 
     @PersistenceContext(unitName = "mtomob_pu")
@@ -41,7 +40,6 @@ public class BookFacade implements BookFacadeLocal{
     }
     @Override
      public Book find(Object bookId) {
-        //return getEntityManager().find(Book.class, id);
         TypedQuery<Book> tq = em.createNamedQuery("Book.findById", Book.class);
         tq.setParameter("idBook", bookId);
         List<Book> acc = tq.getResultList();
