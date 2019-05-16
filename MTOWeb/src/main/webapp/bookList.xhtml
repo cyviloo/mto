@@ -39,7 +39,7 @@ and open the template in the editor.
                     <f:facet name="header">
                         <h:outputText value="Is available"/>
                     </f:facet>
-                    <p:selectBooleanCheckbox value="#{!item.getRentalList().active}" disabled="true"/>
+                    <p:selectBooleanCheckbox value="#{!item.active}" disabled="true"/>
                 </p:column>
             </p:dataTable> 
         </h:form>

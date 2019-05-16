@@ -45,7 +45,7 @@ public class BorrowBookPageBean {
         
         List<Book> listOutput =
     books.stream()
-               .filter(book -> book.getRentalList()==null)  
+               .filter(book -> book.isActive()==false)  
                .collect(Collectors.toList());
         bookDataModel = new ListDataModel<>(listOutput);
     }
