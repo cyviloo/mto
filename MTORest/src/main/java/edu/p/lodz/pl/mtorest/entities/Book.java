@@ -6,15 +6,10 @@
 package edu.p.lodz.pl.mtorest.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import edu.p.lodz.pl.mtorest.utils.ConfigureRentalFilter;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +19,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
@@ -68,7 +62,7 @@ public class Book implements Serializable {
     @Column(name = "year_published", nullable = false)
     private int year;
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "book")
-    //@JsonBackReference
+    @JsonBackReference
     @JsonIgnore
     private Rental rentalList;
     @Transient
@@ -159,6 +153,7 @@ public class Book implements Serializable {
     /**
      * @return the rentalList
      */
+    @JsonIgnore
     public Rental getRentalList() {
         return rentalList;
     }

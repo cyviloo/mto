@@ -5,14 +5,8 @@
  */
 package edu.p.lodz.pl.mtorest.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import edu.p.lodz.pl.mtorest.entities.Account;
-import edu.p.lodz.pl.mtorest.entities.Book;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -30,7 +24,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlElement;
 
 /**
  *
@@ -52,7 +45,7 @@ public class Rental implements Serializable {
     private Integer idRental;
     @JoinColumn(name = "id_book", referencedColumnName = "id_book", nullable = false)
     @ManyToOne(optional = false)
-    //@JsonManagedReference
+    @JsonManagedReference
     private Book book;
     @JoinColumn(name = "id_account", referencedColumnName = "id_account", nullable = false)
     @ManyToOne(optional = false)
