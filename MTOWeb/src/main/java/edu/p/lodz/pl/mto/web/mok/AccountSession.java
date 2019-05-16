@@ -10,6 +10,7 @@ import edu.p.lodz.pl.mto.ejb.mok.endpoints.MOKEndpointLocal;
 import edu.p.lodz.pl.mto.entities.Account;
 import edu.p.lodz.pl.mto.enums.MessageLevel;
 import edu.p.lodz.pl.mto.exceptions.ValidationException;
+import edu.p.lodz.pl.mto.utils.AccountService;
 import java.io.Serializable;
 import javax.annotation.Resource;
 import javax.annotation.security.PermitAll;
@@ -36,11 +37,13 @@ public class AccountSession implements Serializable {
     
     @EJB
     MOKEndpointLocal mOKEndpoint;
+    @EJB
+    AccountService accountService;
     
     @PermitAll
     public void registerAccount(Account account) throws ValidationException {
 
-        mOKEndpoint.registerAccount(account);
+        accountService.registerAccount(account);
     }
     
     @PermitAll
@@ -57,7 +60,7 @@ public class AccountSession implements Serializable {
     public boolean login(final String login) {
 //        TO DO - sprawdzic czy to ma na pewno sens
 
-currUser=mOKEndpoint.getAccountByLogin(login);
+currUser=accountService.getAccountByLogin(login);
 return currUser != null;
     }
     

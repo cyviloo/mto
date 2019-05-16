@@ -6,18 +6,16 @@
 package edu.p.lodz.pl.mto.web.mob;
 
 import edu.p.lodz.pl.mto.beans.MessagesBean;
-import edu.p.lodz.pl.mto.ejb.mob.endpoints.MOBEndpointLocal;
 import edu.p.lodz.pl.mto.entities.Book;
 import edu.p.lodz.pl.mto.entities.Rental;
 import edu.p.lodz.pl.mto.enums.MessageLevel;
+import edu.p.lodz.pl.mto.utils.BookService;
+import edu.p.lodz.pl.mto.utils.RentalService;
 import java.io.Serializable;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -29,8 +27,12 @@ import javax.inject.Named;
 @Named("MobSession")
 public class MOBSession implements Serializable {
 
+//    @EJB
+//    MOBEndpointLocal mOBEndpoint;
     @EJB
-    MOBEndpointLocal mOBEndpoint;
+    RentalService rentalService;
+    @EJB
+    BookService bookService;
 
     //@Resource(name = "messagesBean")
     @Inject
@@ -38,7 +40,7 @@ public class MOBSession implements Serializable {
 
     @PermitAll
     public List<Book> getAllBooks() {
-        return mOBEndpoint.getAllBooks();
+        return bookService.getAllBooks();
     }
 
     @PermitAll
@@ -47,19 +49,19 @@ public class MOBSession implements Serializable {
     }
 
     public void borrowBook(Book book, String login) {
-        mOBEndpoint.borrowBook(book, login);
+        rentalService.borrowBook(book);
     }
 
     public List<Rental> getRentalsByUser() {
-        return mOBEndpoint.getRentalsByUser();
+        return rentalService.findByUser();
     }
 
     public void returnBook(Rental rental) {
-        mOBEndpoint.returnBook(rental);
+        rentalService.returnBook(rental);
     }
 
     public List<Rental> getHistoryRentalsByUser() {
-       return mOBEndpoint.getHistoryRentalsByUser();
+       return rentalService.findHistoryByUser();
     }
 
 }
