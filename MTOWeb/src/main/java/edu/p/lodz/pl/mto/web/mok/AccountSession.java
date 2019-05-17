@@ -6,7 +6,6 @@
 package edu.p.lodz.pl.mto.web.mok;
 
 import edu.p.lodz.pl.mto.beans.MessagesBean;
-import edu.p.lodz.pl.mto.ejb.mok.endpoints.MOKEndpointLocal;
 import edu.p.lodz.pl.mto.entities.Account;
 import edu.p.lodz.pl.mto.enums.MessageLevel;
 import edu.p.lodz.pl.mto.exceptions.ValidationException;
@@ -35,8 +34,6 @@ public class AccountSession implements Serializable {
     @Inject
     MessagesBean messagesBean;
     
-    @EJB
-    MOKEndpointLocal mOKEndpoint;
     @EJB
     AccountService accountService;
     

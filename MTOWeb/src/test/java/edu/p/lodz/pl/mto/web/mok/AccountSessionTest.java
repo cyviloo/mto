@@ -6,9 +6,9 @@
 package edu.p.lodz.pl.mto.web.mok;
 
 import edu.p.lodz.pl.mto.beans.MessagesBean;
-import edu.p.lodz.pl.mto.ejb.mok.endpoints.MOKEndpointLocal;
 import edu.p.lodz.pl.mto.entities.Account;
 import edu.p.lodz.pl.mto.enums.MessageLevel;
+import edu.p.lodz.pl.mto.utils.AccountService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class AccountSessionTest {
     
     public AccountSessionTest() {
         session = new AccountSession();
-        session.mOKEndpoint = mock(MOKEndpointLocal.class);
+        session.accountService = mock(AccountService.class);
         session.messagesBean = mock(MessagesBean.class);
         account = new Account();
         account.setIdAccount(111);
@@ -36,13 +36,13 @@ public class AccountSessionTest {
     
     @Before
     public void setUp() {
-        when(session.mOKEndpoint.getAccountByLogin(anyString()))
+        when(session.accountService.getAccountByLogin(anyString()))
                 .thenReturn(account);
     }
 
     @Test (expected = TestException.class)
     public void shouldCallEndpointRegisterAccountOnRegisterAccount() {
-        doThrow(TestException.class).when(session.mOKEndpoint)
+        doThrow(TestException.class).when(session.accountService)
                 .registerAccount(any(Account.class));
         session.registerAccount(new Account());
     }
@@ -58,9 +58,9 @@ public class AccountSessionTest {
     public void shouldReturnFalseOnTryingToLoginOnNonExistentLogin() {
         AccountSession lsession;
         lsession = new AccountSession();
-        lsession.mOKEndpoint = mock(MOKEndpointLocal.class);
+        lsession.accountService = mock(AccountService.class);
         lsession.messagesBean = mock(MessagesBean.class);
-        when(lsession.mOKEndpoint.getAccountByLogin(anyString()))
+        when(lsession.accountService.getAccountByLogin(anyString()))
                 .thenReturn(null);
         
         Assert.assertFalse(lsession.login("TEST-LOGIN"));

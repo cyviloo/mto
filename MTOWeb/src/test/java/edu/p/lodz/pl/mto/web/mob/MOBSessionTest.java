@@ -6,10 +6,11 @@
 package edu.p.lodz.pl.mto.web.mob;
 
 import edu.p.lodz.pl.mto.beans.MessagesBean;
-import edu.p.lodz.pl.mto.ejb.mob.endpoints.MOBEndpointLocal;
 import edu.p.lodz.pl.mto.entities.Book;
 import edu.p.lodz.pl.mto.entities.Rental;
 import edu.p.lodz.pl.mto.enums.MessageLevel;
+import edu.p.lodz.pl.mto.utils.BookService;
+import edu.p.lodz.pl.mto.utils.RentalService;
 import java.util.Arrays;
 import java.util.List;
 import junit.framework.Assert;
@@ -32,7 +33,8 @@ public class MOBSessionTest {
     
     public MOBSessionTest() {
         session = new MOBSession();
-        session.mOBEndpoint = mock(MOBEndpointLocal.class);
+        session.bookService = mock(BookService.class);
+        session.rentalService = mock(RentalService.class);
         session.messagesBean = mock(MessagesBean.class);
         
         book1 = new Book("TEST-TITLE", "TEST-AUTHOR", 1999);
@@ -46,17 +48,17 @@ public class MOBSessionTest {
     
     @Before
     public void setUp() {
-        when(session.mOBEndpoint.getAllBooks()).
+        when(session.bookService.getAllBooks()).
                 thenReturn(Arrays.asList(book1, book2));
         doThrow(TestException.class).when(session.messagesBean)
                 .showMessage(anyString(), any(MessageLevel.class));
-        doThrow(TestException.class).when(session.mOBEndpoint)
-                .borrowBook(any(Book.class), anyString());
-        doThrow(TestException.class).when(session.mOBEndpoint)
+        doThrow(TestException.class).when(session.rentalService)
+                .borrowBook(any(Book.class));
+        doThrow(TestException.class).when(session.rentalService)
                 .returnBook(any(Rental.class));
-        when(session.mOBEndpoint.getRentalsByUser())
+        when(session.rentalService.findByUser())
                 .thenReturn(Arrays.asList(rental1));
-        when(session.mOBEndpoint.getHistoryRentalsByUser())
+        when(session.rentalService.findHistoryByUser())
                 .thenReturn(Arrays.asList(rental1));
     }
 
