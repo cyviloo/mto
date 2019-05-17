@@ -41,17 +41,17 @@ import javax.validation.ConstraintViolationException;
 public class MOBEndpoint implements MOBEndpointLocal, SessionSynchronization {
 
     @Resource
-    private SessionContext sessionContext;
+    SessionContext sessionContext;
     @EJB
-    private BookFacadeLocal bookFacade;
+    BookFacadeLocal bookFacade;
     @EJB
-    private AccountFacadeMOKLocal accountFacade;
+    AccountFacadeMOKLocal accountFacade;
     @EJB
-    private RentalFacadeLocal rentalFacade;
+    RentalFacadeLocal rentalFacade;
 
-    protected static final Logger loger = Logger.getGlobal();
+    static Logger loger = Logger.getGlobal();
 
-    private long transactionID;
+    long transactionID;
 
     @Override
     @PermitAll
