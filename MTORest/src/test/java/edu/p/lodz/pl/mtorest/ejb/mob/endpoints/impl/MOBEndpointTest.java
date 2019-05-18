@@ -84,12 +84,12 @@ public class MOBEndpointTest {
     public void shouldReturnCorrectBooks() {
         Book book1 = endpoint.getAllBooks().get(0);
         Book book2 = endpoint.getAllBooks().get(1);
-        Assert.assertEquals("B", book1.getAuthor());
-        Assert.assertEquals("Bb", book2.getAuthor());
-        Assert.assertEquals("A", book1.getTitle());
-        Assert.assertEquals("Aa", book2.getTitle());
-        Assert.assertEquals(1992, book1.getYear());
-        Assert.assertEquals(1392, book2.getYear());
+        Assert.assertEquals(new Book("A", "B", 1992), book1);
+        Assert.assertEquals(new Book("Aa", "Bb", 1392), book2);
+//        Assert.assertEquals("A", book1.getTitle());
+//        Assert.assertEquals("Aa", book2.getTitle());
+//        Assert.assertEquals(1992, book1.getYear());
+//        Assert.assertEquals(1392, book2.getYear());
     }
 
     @Test
@@ -111,15 +111,17 @@ public class MOBEndpointTest {
         endpoint.afterCompletion(false);
     }
 
-//    @Test
-//    public void shouldFetchCorrectAccountFromSession() {
-//        Account acc = endpoint.fetchAccountFromSession();
+    @Test
+    public void shouldFetchCorrectAccountFromLogin() {
+        Account acc = endpoint.fetchAccountFromLogin(account.getLogin());
+        Assert.assertEquals(account, acc);
 //        Assert.assertEquals(new Integer(1), acc.getIdAccount());
 //        Assert.assertEquals("MockAccount", acc.getLogin());
 //        Assert.assertEquals(new Date(1970, 1, 1), acc.getBirthDate());
 //        Assert.assertEquals("Mock1", acc.getName());
 //        Assert.assertEquals("Mock2", acc.getSurname());
-//    }
+    }
+    
     @Test(expected = ValidationException.class)
     public void shouldThrowValidationExceptionOnNullAccount()
             throws TransactionRolledbackException {
@@ -144,7 +146,7 @@ public class MOBEndpointTest {
         when(endpoint.bookFacade.find(anyInt())).thenReturn(book);
 
         ArgumentCaptor captor = ArgumentCaptor.forClass(Rental.class);
-        doNothing().when(endpoint.rentalFacade).create((Rental) captor.capture());
+        when(endpoint.rentalFacade.create((Rental) captor.capture())).thenReturn(1);
         when(endpoint.accountFacade.findByLogin("test_login")).thenReturn(account);
 
         endpoint.borrowBook(book, "test_login");
@@ -154,16 +156,8 @@ public class MOBEndpointTest {
         Book resultBook = resultRental.getBook();
 
         Assert.assertTrue(resultRental.isActive());
-
-        Assert.assertEquals(new Integer(1), resultAccount.getIdAccount());
-        Assert.assertEquals("MockAccount", resultAccount.getLogin());
-        Assert.assertEquals("Mock1", resultAccount.getName());
-        Assert.assertEquals("Mock2", resultAccount.getSurname());
-        Assert.assertEquals(new Date(1970, 1, 1), resultAccount.getBirthDate());
-
-        Assert.assertEquals("A", resultBook.getTitle());
-        Assert.assertEquals("B", resultBook.getAuthor());
-        Assert.assertEquals(1992, resultBook.getYear());
+        Assert.assertEquals(account, resultAccount);
+        Assert.assertEquals(book, resultBook);
     }
 
     @Test
@@ -209,15 +203,14 @@ public class MOBEndpointTest {
 
         Assert.assertEquals(1, endpoint.getRentalsByUser(account.getLogin()).size());
         Assert.assertEquals(
-                account, endpoint.getRentalsByUser(account.getLogin()).get(0).getAccount());
-        Assert.assertEquals(
-                new Integer(1), endpoint.getRentalsByUser(account.getLogin()).get(0).getIdRental());
-        Assert.assertEquals(
-                new Book("A", "B", 1999), endpoint.getRentalsByUser(account.getLogin()).get(0).getBook());
-        Assert.assertEquals(
-                new Date(2003, 1, 2), endpoint.getRentalsByUser(account.getLogin()).get(0).getStartDate());
-        Assert.assertEquals(
-                new Date(2003, 2, 3), endpoint.getRentalsByUser(account.getLogin()).get(0).getEndDate());
+                rental1, endpoint.getRentalsByUser(account.getLogin()).get(0));
+    }
+    
+    @Test(expected = ValidationException.class)
+    public void shouldThrowOnTryingToReturnBookForNonExistentRental()
+            throws TransactionRolledbackException {
+        when(endpoint.rentalFacade.find(anyInt())).thenReturn(null);
+        endpoint.returnBook(new Rental());
     }
 
     @Test(expected = TestException.class)
@@ -225,8 +218,8 @@ public class MOBEndpointTest {
         Rental rental1 = new Rental();
         rental1.setActive(true);
         rental1.setEndDate(new Date(0));
-        doNothing().when(endpoint.rentalFacade).edit(Matchers.eq(rental1));
-
+        when(endpoint.rentalFacade.find(anyInt())).thenReturn(rental1);
+        
         endpoint.returnBook(rental1);
         Assert.assertFalse(rental1.isActive());
         Assert.assertNotEquals(new Date(0), rental1.getEndDate());
@@ -267,19 +260,7 @@ public class MOBEndpointTest {
 
         Assert.assertEquals(1, endpoint.getHistoryRentalsByUser(account.getLogin()).size());
         Assert.assertEquals(
-                account,
-                endpoint.getHistoryRentalsByUser(account.getLogin()).get(0).getAccount());
-        Assert.assertEquals(
-                new Integer(11),
-                endpoint.getHistoryRentalsByUser(account.getLogin()).get(0).getIdRental());
-        Assert.assertEquals(
-                new Book("B", "C", 1999),
-                endpoint.getHistoryRentalsByUser(account.getLogin()).get(0).getBook());
-        Assert.assertEquals(
-                new Date(2003, 4, 2),
-                endpoint.getHistoryRentalsByUser(account.getLogin()).get(0).getStartDate());
-        Assert.assertEquals(
-                new Date(2003, 5, 3),
-                endpoint.getHistoryRentalsByUser(account.getLogin()).get(0).getEndDate());
+                rental1,
+                endpoint.getHistoryRentalsByUser(account.getLogin()).get(0));
     }
 }
